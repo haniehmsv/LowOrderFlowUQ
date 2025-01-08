@@ -23,7 +23,7 @@ X_train, X_test, X_train_CL, X_test_CL, X_train_pres, X_test_pres = train_test_s
 
 # Conv2D-MLP autoencoder
 batch_size = 128
-continue_state = False
+continue_state = False  # Set this to True to continue training from a saved model
 if continue_state:
     # Load the previously saved model
     if os.path.exists('./model.keras'):
@@ -85,7 +85,7 @@ else:
     model.compile(optimizer='adam', loss='mse',loss_weights=[1,0.05]) # beta = 0.05 determined by L-curve analysis
     
 from keras.callbacks import ModelCheckpoint,EarlyStopping
-model_cb=ModelCheckpoint('./model.keras', monitor='val_loss',save_best_only=True,verbose=1)
+model_cb=ModelCheckpoint('./autoencoder_model.keras', monitor='val_loss',save_best_only=True,verbose=1)
 early_cb=EarlyStopping(monitor='val_loss', patience=200,verbose=1)
 cb = [model_cb, early_cb]
 history = model.fit(X_train,[X_train,X_train_CL],epochs=50000,batch_size=batch_size,verbose=1,callbacks=cb,shuffle=True,validation_data=(X_test, [X_test,X_test_CL]))
@@ -94,3 +94,8 @@ history = model.fit(X_train,[X_train,X_train_CL],epochs=50000,batch_size=batch_s
 df_results = pd.DataFrame(history.history)
 df_results['epoch'] = history.epoch
 df_results.to_csv(path_or_buf='./history.csv',index=False)
+
+# saving learned latent variables
+encoder = Model(inputs=model.input, outputs=model.get_layer('dense_4').output)
+x_lat = encoder.predict(y_1)
+np.save('x_lat.npy', x_lat)
