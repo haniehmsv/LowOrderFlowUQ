@@ -111,7 +111,7 @@ def multivariate_gaussian_nll(y_true, y_pred):
     
     Args:
         y_true: Tensor of shape (batch_size, 3) containing true latent variables.
-        y_pred: Tensor of shape (batch_size, 6) containing predicted means and log-variances/covariances.
+        y_pred: Tensor of shape (batch_size, 9) containing predicted means and 6 elements of a lower triangular matrix.
     
     Returns:
         loss: Scalar tensor representing the average negative log-likelihood over the batch.
