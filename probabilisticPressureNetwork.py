@@ -152,8 +152,8 @@ latent_dim = 3
 ## Initialize the generator with your dataset
 std_pres = 5e-03    # 0.1% accuracy
 std_loc = 0.0
-train_generator = NoisyDataGenerator(sensors, x_lat, batch_size, std_pres, std_loc)
-test_generator = NoisyDataGenerator(sensors, x_lat, batch_size, std_pres, std_loc)
+train_generator = NoisyDataGenerator(X_train_pres, Y_train_lat, batch_size, std_pres, std_loc)
+test_generator = NoisyDataGenerator(X_test_pres, Y_test_lat, batch_size, std_pres, std_loc)
 
 continue_state = False   # Set this to True to continue training from a saved model
 if continue_state:
